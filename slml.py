@@ -1,14 +1,12 @@
 import streamlit as st
-from langchain import OpenAI
-from langchain.docstore.document import Document
+from langchain_community.llms import OpenAI
+from langchain_community.docstore.document import Document
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.chains.summarize import load_summarize_chain
 
-api_key = "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"
-
 def generate_response(txt):
     # Instantiate the LLM model
-    llm = OpenAI(temperature=0, openai_api_key=api_key)
+    llm = OpenAI(temperature=0, openai_api_key=openai_api_key)
     # Split text
     text_splitter = CharacterTextSplitter()
     texts = text_splitter.split_text(txt)
@@ -30,9 +28,10 @@ with st.form('summarize_form', clear_on_submit=True):
     submitted = st.form_submit_button('Submit')
     if submitted and openai_api_key.startswith('sk-'):
         with st.spinner('Calculating...'):
-        response = generate_response(txt_input)
-        result.append(response)
-        del openai_api_key
+            response = generate_response(txt_input)
+            result.append(response)
+            del openai_api_key
         
 if len(result):
     st.info(response)
+
